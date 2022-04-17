@@ -2,14 +2,17 @@ import { firebase, firebaseApp } from "firebase/compat/app";
 import 'firebase/compat/auth';
 import 'firebase/compat/firestore';
 import "firebase/storage";
-import { getFirestore } from 'firebase/firestore/lite';
-// Import the functions you need from the SDKs you need
+import { getStorage } from "firebase/storage";
+// import { getFirestore } from 'firebase/firestore/lite';
 import { initializeApp } from "firebase/app";
+import { getFirestore}  from "firebase/firestore";
+// Import the functions you need from the SDKs you need
+// import { initializeApp } from "firebase/app";
 
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
-// Your web app's Firebase configuration
+// Your web app's Firebase configuration 
 const firebaseConfig = {
   apiKey: "AIzaSyCvTo_GXnDSMYruHMLsC-uwA5NCHR37yYs",
   authDomain: "facebook-dcc57.firebaseapp.com",
@@ -26,8 +29,10 @@ const app = initializeApp(firebaseConfig);
 // const app = !firebase.app.length ? firebase.initializeApp(firebaseConfig) : firebase.app();
 
 // const db = app.firestore();
-// const storage = firebase.storage();
+const storage = getStorage(app);
+
+
 
 const db = getFirestore(app);
 
-export {db} ;
+export {db, storage} ;
