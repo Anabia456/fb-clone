@@ -7,6 +7,7 @@ import { db, storage } from "../firebase";
 import { collection ,doc, setDoc } from "firebase/firestore"; 
 import { ref, uploadString, getDownloadURL, uploadBytesResumable  } from "firebase/storage";
 import { useCollection } from "react-firebase-hooks/firestore"
+import { nanoid } from 'nanoid'
 
 function InputBox() {
     const session = useSession();
@@ -21,7 +22,10 @@ function InputBox() {
         //if it hasnot any value or the inputbox is empty then return it
         if(!inputRef.current.value) return;
 
-        await setDoc(doc(db, "posts", "LA"),{
+        const randomId = nanoid() 
+        console.log("image:" , imageToPost);
+
+        await setDoc(doc(db, "posts", randomId),{
             message: inputRef.current.value,
             // name & email & image of user gonna comes from session
             name: session.data.user.name,
@@ -31,45 +35,82 @@ function InputBox() {
             // timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
         }).then(doc => {
 
-                const storageRef = ref(storage, `posts/${doc}`);
-                const uploadTask = uploadBytesResumable(storageRef, imageToPost, 'data_url');
-    
-                uploadTask.on('state_changed', null,
-                (error) => {
-                  alert(error);
-                },
-                () => {
-                  getDownloadURL(uploadTask.snapshot.ref)
-                  .then((url) => {
-                    // const postRef = doc1(db, 'posts', 'LA');
-                    // setDoc(postRef, { postImage: url }, { merge: true });
-    
-                      setDoc(doc(db, "posts", "LA"),
-                      { postImage: url },
-                      { merge: true});
-                  });
-                }
-              );
+                // const storageRef = ref(storage, `posts/${doc}`);
+                // const uploadTask = uploadBytesResumable(storageRef, imageToPost, 'data_url');
+                console.log(doc);
+                // const storage = getStorage();
+                // const storageRef = ref(storage, 'some-child');
+
+                // 'file' comes from the Blob or File API
+                // uploadBytes(storageRef, imageToPost).then((snapshot) => {
+                // console.log('Uploaded a blob or file!');
+                // });
+
+                // uploadTask.on('state_changed', null,
+                // (error) => {
+                //   alert(error);
+                // },
+                // () => {
+                //   getDownloadURL(uploadTask.snapshot.ref)
+                //   .then((url) => {
+                //     // const postRef = doc1(db, 'posts', 'LA');
+                //     // setDoc(postRef, { postImage: url }, { merge: true });
+                //     //     console.log(url);
+                //     //   setDoc(doc(db, "posts", "LA"),
+                //     //   { postImage: url },
+                //     //   { merge: true}).catch((err) => console.log(err));
+
+                 
+
+                //   });
+                });
     
         inputRef.current.value = "";
         removeImage();
-    });
-}
+    };
 
 
-    const addImageToPost = (e) => {
-        //initialize special api code file reader
-        const reader = new FileReader();
-        if(e.target.files[0]){
-            //this will gonna read that image file as data url
-            reader.readAsDataURL(e.target.files[0]);
+    // const uploadImage = async(e) => {
+    //     const storageRef = ref(storage, `posts/${"abc"}`);
+    //     const uploadTask = uploadBytesResumable(storageRef, imageToPost, 'data_url');
+    //      uploadTask.on('state_changed', null,
+    //             (error) => {
+    //               alert(error);
+    //             },
+    //             () => {
+    //               getDownloadURL(uploadTask.snapshot.ref)
+    //               .then((url) => {
+    //                   setDoc(doc(db, "posts", "LA"),
+    //                   { postImage: url },
+    //                   { merge: true}).catch((err) => console.log(err));
+
+    //               }).catch((err) => console.log(err));
+    //             });
+    // }
+
+    const addImageToPost = async (e) => {
+        const metadata = {
+            contentType: 'image/jpeg'
+        };
+        const file = e.target.files[0]
+        //destructuring name of file
+        const {name} = file
+        //${name}_${Date.now().toString()} name of image, currrent date in string for unoque identity
+        const storageRef = ref(storage, `images/${name}_${Date.now().toString()}`);
+    
+        const uploadTask = uploadBytesResumable(storageRef, file, metadata);
+                
+        await uploadTask.on('state_changed',
+         (snapshot) => {
+            console.log(snapshot.state);
+            console.log("snapshot" , snapshot);
+        }), () => {
+            getDownloadURL(uploadTask.snapshot.ref)
+            .then((url) => {
+                console.log("url",url);
+                setImageToPost(url);
+              }).catch((err) => console.log(err));
         }
-
-        // as reader is asynchronous function so we are gonna give onload
-        //when it loads and reader event comes back
-        reader.onload = (readerEvent) => {
-            setImageToPost(readerEvent.target.result);
-        }; 
     };
 
     //will again set image post to null
@@ -100,10 +141,11 @@ function InputBox() {
                 {imageToPost && (
                     <div onClick={removeImage} className="flex flex-col filter hover:brightness-110 
                     transition-duration-150 transform hover:scale-105 cursor-pointer">
-                        <img src="{imageToPost}" className="h-10 object-contain"/>
+                        <img src={imageToPost} className="h-10 object-contain"/>
                         <p className="text-xs text-red-500 text-center">Remove</p>
                     </div>
                 )}
+                {/* <button onClick={uploadImage}>Upload</button> */}
             </div>
                 <div className="flex justify-evenly border-t">
                     <div className="inputIcon">
@@ -133,7 +175,7 @@ function InputBox() {
 
 export default InputBox
 
-
+//https://www.simplenextjs.com/posts/next-firestore
 
 
         // collecion of posts where we gonna push the msg
