@@ -4,6 +4,7 @@ import Feed from "../components/Feed"
 import Header from '../components/Header'
 import LogIn from '../components/LogIn '
 import SideBar from '../components/SideBar'
+import Widgets from '../components/Widgets'
 
 export default function Home({ session }) {
 
@@ -23,7 +24,7 @@ export default function Home({ session }) {
       <main className="flex">
         <SideBar />
         <Feed />
-        {/* WIDGETS */}
+        <Widgets />
       </main>
 
       </div>

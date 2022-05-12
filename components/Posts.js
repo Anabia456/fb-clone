@@ -25,12 +25,10 @@ function Posts() {
 
   return (
     <div>
-      {/* <h1>post</h1> */}
-      <Post name="alexa"/>
 
     {value && (
       <span>
-        Collection:{' '}
+        {/* Collection:{' '} */}
         {value.docs.map((post) => {
           console.log(post.data());
           return(

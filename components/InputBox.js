@@ -13,6 +13,17 @@ function InputBox() {
     const session = useSession();
     const inputRef = useRef(null);
     const filePickerRef = useRef(null);
+    const [isDisabled, setisDisabled] = useState(false);
+    // console.log("17",isDisabled)
+
+
+    const handleDisable = () => {
+        setisDisabled(!isDisabled);
+        // console.log("22", setisDisabled)
+        return;
+    };
+    // https://www.codegrepper.com/code-examples/javascript/get+opposite+of+current+state+react
+  
     //state to hold/sustain image until it's not posted
     const [imageToPost, setImageToPost] = useState(null);
 
@@ -33,62 +44,17 @@ function InputBox() {
             Image: session.data.user.image,
             postImage: imageToPost,
             // timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
-        }).then(doc => {
-
-                // const storageRef = ref(storage, `posts/${doc}`);
-                // const uploadTask = uploadBytesResumable(storageRef, imageToPost, 'data_url');
-                console.log(doc);
-                // const storage = getStorage();
-                // const storageRef = ref(storage, 'some-child');
-
-                // 'file' comes from the Blob or File API
-                // uploadBytes(storageRef, imageToPost).then((snapshot) => {
-                // console.log('Uploaded a blob or file!');
-                // });
-
-                // uploadTask.on('state_changed', null,
-                // (error) => {
-                //   alert(error);
-                // },
-                // () => {
-                //   getDownloadURL(uploadTask.snapshot.ref)
-                //   .then((url) => {
-                //     // const postRef = doc1(db, 'posts', 'LA');
-                //     // setDoc(postRef, { postImage: url }, { merge: true });
-                //     //     console.log(url);
-                //     //   setDoc(doc(db, "posts", "LA"),
-                //     //   { postImage: url },
-                //     //   { merge: true}).catch((err) => console.log(err));
-
-                 
-
-                //   });
-                });
+        })
     
         inputRef.current.value = "";
         removeImage();
     };
 
 
-    // const uploadImage = async(e) => {
-    //     const storageRef = ref(storage, `posts/${"abc"}`);
-    //     const uploadTask = uploadBytesResumable(storageRef, imageToPost, 'data_url');
-    //      uploadTask.on('state_changed', null,
-    //             (error) => {
-    //               alert(error);
-    //             },
-    //             () => {
-    //               getDownloadURL(uploadTask.snapshot.ref)
-    //               .then((url) => {
-    //                   setDoc(doc(db, "posts", "LA"),
-    //                   { postImage: url },
-    //                   { merge: true}).catch((err) => console.log(err));
-
-    //               }).catch((err) => console.log(err));
-    //             });
-    // }
-
     const addImageToPost = async (e) => {
+        handleDisable();
+        // console.log("56", isDisabled);
+
         const metadata = {
             contentType: 'image/jpeg'
         };
@@ -104,14 +70,30 @@ function InputBox() {
          (snapshot) => {
             console.log(snapshot.state);
             console.log("snapshot" , snapshot);
-        }), () => {
+            switch (snapshot.state) {
+                case 'paused':
+                  console.log('Upload is paused');
+                  break;
+                case 'running':
+                  console.log('Upload is running');
+                  break;
+              }
+        },  (error) => {
+                console.log(error);
+          }, 
+        () => {
             getDownloadURL(uploadTask.snapshot.ref)
             .then((url) => {
                 console.log("url",url);
                 setImageToPost(url);
               }).catch((err) => console.log(err));
+              
         }
+        );
+     
     };
+  
+
 
     //will again set image post to null
     const removeImage = () => {
@@ -133,6 +115,7 @@ function InputBox() {
                     <input
                     className="rounded-full h-12 bg-gray-100 flex-grow px-5 focus:outline-none" 
                     type="text" 
+                    disabled = {isDisabled ? false : true}
                     ref={inputRef}
                     placeholder={`What's on your mind, ${session.data.user.name}?`}/>
                     <button hidden onClick={sendPost} type="submit">Submit</button>
@@ -174,50 +157,3 @@ function InputBox() {
 
 
 export default InputBox
-
-//https://www.simplenextjs.com/posts/next-firestore
-
-
-        // collecion of posts where we gonna push the msg
-        // db.collection('posts').add({
-        //     //whatever typed in inputbox
-        //     message: inputRef.current.value,
-        //     //name & email & image of user gonna comes from session
-        //     name: session.data.user.name,
-        //     email: session.data.user.email,
-        //     Image: session.data.user.image,
-        //     timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
-        // });
-
-        // addDoc(collection(db, "posts"), {
-        //         message: inputRef.current.value,
-        //         name: session.data.user.name,
-        //         email: session.data.user.email,
-        //         Image: session.data.user.image,
-        //         timeStamp: firebase.firestore.FieldValue.serverTimestamp()
-        //   })
-
-        // addDoc(collection(db, "posts"), {
-        //     message:inputRef.current.value,
-        //     name:session.data.user.name,
-        //     email:session.data.user.email,
-        //     image:session.data.user.image,
-        //     timeStamp: firebase.firestore.FieldValue.serverTimestamp()
-        // })
-
-
-        // // const collectionRef = doc(db, 'posts');
-        // //     const docRef = addDoc(collectionRef, {
-        // //         message:inputRef.current.value,
-        // //         name:session.data.user.name,
-        // //         email:session.data.user.email,
-        // //         image:session.data.user.image,
-        // //         timeStamp: firebase.firestore.FieldValue.serverTimestamp(),
-        // //     });
-
-        // // const colRef = addDoc(collection(db, "posts"), {
-        // //     message:inputRef.current.value,
-        // //     name:session.data.user.name,
-        // //     email:session.data.user.email,
-        // //     image:session.data.user.image,
-        // //     timeStamp: firebase.firestore.FieldValue.serverTimestamp()
