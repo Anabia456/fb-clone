@@ -41,6 +41,7 @@ function Header() {
           {/* profile picture */}
 
           <Image 
+          alt="image"
             onClick={signOut}
             className="rounded-full cursor-pointer"
             src="https://links.papareact.com/zof"

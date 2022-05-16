@@ -32,7 +32,7 @@ function Posts() {
         {value.docs.map((post) => {
           console.log(post.data());
           return(
-          <div>
+          <div key={post.id}>
             <Post
               key={post.id}
               name={post.data().name}

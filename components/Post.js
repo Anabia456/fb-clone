@@ -22,7 +22,7 @@ function Post({ name, message , postImage, image}) {
       {
         postImage?
         <div className='relative h-56 md:h-96 bg-white'>
-        <Image src={postImage} objectFit="cover" layout="fill"/>
+        <Image alt='image' src={postImage} objectFit="cover" layout="fill"/>
         </div>:<></>
         
       }
