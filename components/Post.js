@@ -1,5 +1,6 @@
 import React from 'react';
 import {ChatAltIcon, ShareIcon, ThumbUpIcon} from '@heroicons/react/outline';
+import Image from 'next/image';
 
 function Post({ name, message , postImage, image}) {
 
@@ -7,7 +8,7 @@ function Post({ name, message , postImage, image}) {
     <div className='flex flex-col'>
       <div className='p-5 bg-white mt-5 rounded-t-2xl  shadow-5m'> 
         <div className='flex items-center space-x-2'>
-          <img className='rounded-full' src='https://links.papareact.com/zof' width={40} height={40}/>
+          <Image className='rounded-full' src='https://links.papareact.com/zof' width={40} height={40}/>
           <div>
             <p className='font-medium'>{name}</p>
             <p className='text-xs text-gray-400'>
@@ -21,7 +22,7 @@ function Post({ name, message , postImage, image}) {
       {
         postImage?
         <div className='relative h-56 md:h-96 bg-white'>
-        <img src={postImage} objectFit="cover" layout="fill"/>
+        <Image src={postImage} objectFit="cover" layout="fill"/>
         </div>:<></>
         
       }
