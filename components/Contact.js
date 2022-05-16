@@ -6,6 +6,7 @@ function Contact({ src, name }) {
         <Image
         className='rounded-full'
         src={src}
+        alt="Image"
         width={40}
         height={40}
         layout="fixed"

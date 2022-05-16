@@ -105,6 +105,7 @@ function InputBox() {
         <div className="bg-white rounded-2xl shadow-md p-2 text-gray-500 font-medium mt-6">
             <div className="flex space-x-4 p-4 items-center">
                 <Image 
+                    alt="Image"
                     className="rounded-full"
                     src="https://links.papareact.com/zof"
                     width={40}
@@ -124,7 +125,7 @@ function InputBox() {
                 {imageToPost && (
                     <div onClick={removeImage} className="flex flex-col filter hover:brightness-110 
                     transition-duration-150 transform hover:scale-105 cursor-pointer">
-                        <Image src={imageToPost} className="h-10 object-contain"/>
+                        <Image alt="Image" src={imageToPost} className="h-10 object-contain"/>
                         <p className="text-xs text-red-500 text-center">Remove</p>
                     </div>
                 )}

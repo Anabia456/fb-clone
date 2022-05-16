@@ -8,7 +8,7 @@ function Post({ name, message , postImage, image}) {
     <div className='flex flex-col'>
       <div className='p-5 bg-white mt-5 rounded-t-2xl  shadow-5m'> 
         <div className='flex items-center space-x-2'>
-          <Image className='rounded-full' src='https://links.papareact.com/zof' width={40} height={40}/>
+          <Image alt="Image" className='rounded-full' src='https://links.papareact.com/zof' width={40} height={40}/>
           <div>
             <p className='font-medium'>{name}</p>
             <p className='text-xs text-gray-400'>

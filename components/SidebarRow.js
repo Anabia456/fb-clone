@@ -6,6 +6,7 @@ function SidebarRow({ src, Icon, title }) {
          {src && (
             //giving an error in my case
             <Image
+                alt="Image"
                 className="rounded-full"
                 src="https://links.papareact.com/zof"
                 width={30}
